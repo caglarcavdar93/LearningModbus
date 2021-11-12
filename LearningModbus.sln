@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningModbus", "LearningModbus.csproj", "{650F7A56-47C9-4052-A7F7-4C5461CB77C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingData", "ReadingData\ReadingData.csproj", "{688888A7-4032-4DAA-B03E-3DEC8CE92689}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreatingServer", "CreatingServer\CreatingServer.csproj", "{76EE4B50-D319-47CF-B9B1-3D3BFA4F0B32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{650F7A56-47C9-4052-A7F7-4C5461CB77C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{650F7A56-47C9-4052-A7F7-4C5461CB77C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{650F7A56-47C9-4052-A7F7-4C5461CB77C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{650F7A56-47C9-4052-A7F7-4C5461CB77C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{688888A7-4032-4DAA-B03E-3DEC8CE92689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{688888A7-4032-4DAA-B03E-3DEC8CE92689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{688888A7-4032-4DAA-B03E-3DEC8CE92689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{688888A7-4032-4DAA-B03E-3DEC8CE92689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76EE4B50-D319-47CF-B9B1-3D3BFA4F0B32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76EE4B50-D319-47CF-B9B1-3D3BFA4F0B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76EE4B50-D319-47CF-B9B1-3D3BFA4F0B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76EE4B50-D319-47CF-B9B1-3D3BFA4F0B32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {95204E2D-9C73-4F44-9FEA-7A0340673A5A}
+		SolutionGuid = {D65AEDF5-663C-4B2A-992C-14BC5C253124}
 	EndGlobalSection
 EndGlobal

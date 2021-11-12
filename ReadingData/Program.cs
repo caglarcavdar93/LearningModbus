@@ -3,12 +3,13 @@ using System;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace LearningModbus
+namespace ReadingData
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+
             var modbusFactory = new ModbusFactory();
             var tcpClient = new TcpClient();
             IModbusMaster master = modbusFactory.CreateMaster(tcpClient);
@@ -22,7 +23,6 @@ namespace LearningModbus
                 var result = master.ReadHoldingRegisters(1, 0, 1);
                 Console.WriteLine(result[0]);
             }
-            Console.ReadLine();
         }
     }
 }
