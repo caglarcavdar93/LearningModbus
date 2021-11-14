@@ -10,19 +10,35 @@ namespace PublishingData
 {
     public class Worker : BackgroundService
     {
+        private readonly IModbusService _modbusService;
         private readonly ILogger<Worker> _logger;
-
-        public Worker(ILogger<Worker> logger)
+        private readonly IPiStatusService _piStatusService;
+        public Worker(IModbusService modbusService, ILogger<Worker> logger, IPiStatusService piStatusService)
         {
+            //Create modbus server
+            _modbusService = modbusService;
             _logger = logger;
+            _piStatusService = piStatusService;
+           
         }
-
+        public override Task StartAsync(CancellationToken cancellationToken)
+        {
+            _modbusService.CreateServer();
+            return base.StartAsync(cancellationToken);
+        }
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _modbusService.Dispose();
+            return base.StopAsync(cancellationToken);
+        }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
+                //Read CPU usage, memory usage, cpu heat
+                var currentPiStatus= _piStatusService.GetPiStatus();
+                _logger.LogInformation($"Cpu Usage:{currentPiStatus.CpuUsage} -- Cpu Heat:{currentPiStatus.CpuHeat} -- Ram Usage:{currentPiStatus.RamUsage}");
+                await Task.Delay(5000, stoppingToken);
             }
         }
     }

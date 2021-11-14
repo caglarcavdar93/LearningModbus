@@ -12,6 +12,9 @@ namespace PublishingData
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            ServiceCollection services = new ServiceCollection();
+            services.AddTransient<IModbusService,ModbusService>();
+            services.AddTransient<IPiStatusService,PiStatusService>();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
