@@ -19,7 +19,7 @@ namespace PublishingData
             _modbusService = modbusService;
             _logger = logger;
             _piStatusService = piStatusService;
-           
+
         }
         public override Task StartAsync(CancellationToken cancellationToken)
         {
@@ -36,8 +36,14 @@ namespace PublishingData
             while (!stoppingToken.IsCancellationRequested)
             {
                 //Read CPU usage, memory usage, cpu heat
-                var currentPiStatus= _piStatusService.GetPiStatus();
+                var currentPiStatus = new PiStatus()
+                {
+                    CpuHeat = 55,
+                    CpuUsage = 30,
+                    RamUsage = 48,
+                };//_piStatusService.GetPiStatus();
                 _logger.LogInformation($"Cpu Usage:{currentPiStatus.CpuUsage} -- Cpu Heat:{currentPiStatus.CpuHeat} -- Ram Usage:{currentPiStatus.RamUsage}");
+                _modbusService.Publish(currentPiStatus);
                 await Task.Delay(5000, stoppingToken);
             }
         }

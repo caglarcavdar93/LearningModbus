@@ -9,7 +9,7 @@ namespace PublishingData
     public interface IModbusService : IDisposable
     {
         public void CreateServer();
-        public void Publish<T>(T data);
+        public void Publish<T>(T data) where T : class;
 
     }
 }
