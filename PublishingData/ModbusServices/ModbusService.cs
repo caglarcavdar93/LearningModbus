@@ -19,9 +19,9 @@ namespace PublishingData
         private TcpClient _tcpClient;
         private readonly IPAddress _ipAddress;
         private readonly int _port;
-        public ModbusService()
+        public ModbusService(IModbusFactory modbusFactory)
         {
-            _modbusFactory = new ModbusFactory();
+            _modbusFactory = modbusFactory;
             var host = Dns.GetHostEntry(Dns.GetHostName());
             _ipAddress = host.AddressList.Where(x => x.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault()?? IPAddress.Parse("127.0.0.1");
             _port = 10512;

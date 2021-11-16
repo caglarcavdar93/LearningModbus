@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NModbus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace PublishingData
                 {
                     services.AddTransient<IModbusService, ModbusService>();
                     services.AddTransient<IPiStatusService, PiStatusService>();
+                    services.AddTransient<IModbusFactory, ModbusFactory>();
                     services.AddHostedService<Worker>();
                 });
     }
