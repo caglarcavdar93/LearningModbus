@@ -24,6 +24,7 @@ namespace PublishingData
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _modbusService.CreateServer();
+            _modbusService.CreatePublisher();
             return base.StartAsync(cancellationToken);
         }
         public override Task StopAsync(CancellationToken cancellationToken)
@@ -44,7 +45,7 @@ namespace PublishingData
                 };//_piStatusService.GetPiStatus();
                 _logger.LogInformation($"Cpu Usage:{currentPiStatus.CpuUsage} -- Cpu Heat:{currentPiStatus.CpuHeat} -- Ram Usage:{currentPiStatus.RamUsage}");
                 _modbusService.Publish(currentPiStatus);
-                await Task.Delay(5000, stoppingToken);
+                await Task.Delay(1000, stoppingToken);
             }
         }
     }
