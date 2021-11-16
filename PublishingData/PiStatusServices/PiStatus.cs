@@ -8,8 +8,8 @@ namespace PublishingData
 {
     public class PiStatus
     {
-        public int CpuUsage { get; set; }
-        public int CpuHeat { get; set; }
-        public int RamUsage { get; set; }
+        public ushort CpuUsage { get; set; }
+        public ushort CpuHeat { get; set; }
+        public ushort RamUsage { get; set; }
     }
 }
