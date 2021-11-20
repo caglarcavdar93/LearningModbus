@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PublishingData
+namespace PublishingData.DevicePerformanceInfo
 {
-    public interface IPiStatusService
+    public interface IMacDevicePerformanceInfo : IDevicePerformanceInfo
     {
-        public PiStatus GetPiStatus();
     }
 }

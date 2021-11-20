@@ -19,9 +19,6 @@ namespace PublishingData
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddTransient<IModbusService, ModbusService>();
-                    services.AddTransient<IPiStatusService, PiStatusService>();
-                    services.AddTransient<IModbusFactory, ModbusFactory>();
                     services.AddHostedService<Worker>();
                 });
     }
