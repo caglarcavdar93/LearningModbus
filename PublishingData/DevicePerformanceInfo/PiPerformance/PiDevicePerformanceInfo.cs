@@ -1,18 +1,14 @@
-﻿using LibreHardwareMonitor.Hardware;
-using System.Linq;
+﻿using System.Linq;
+using Iot.Device.CpuTemperature;
 
 namespace PublishingData.DevicePerformanceInfo
 {
     public class PiDevicePerformanceInfo : IPiDevicePerformanceInfo
     {
-        private readonly Computer _computer;
+        private readonly CpuTemperature _cpuTemperature;
         public PiDevicePerformanceInfo()
         {
-            _computer = new Computer()
-            {
-                IsCpuEnabled = true
-            };
-            _computer.Open();
+            _cpuTemperature = new CpuTemperature();
         }
         public DevicePerformance GetPerformanceInfo()
         {
@@ -36,12 +32,8 @@ namespace PublishingData.DevicePerformanceInfo
 
         private ushort GetCpuHeat()
         {
-
-            var hardwareItems = _computer.Hardware.Where(x => x.HardwareType == HardwareType.Cpu).FirstOrDefault();
-            hardwareItems.Update();
-            var sensor = hardwareItems.Sensors.Where(x => x.SensorType == SensorType.Temperature).FirstOrDefault();
-
-            return (ushort)sensor.Value.Value;
+            var heat= _cpuTemperature.Temperature.DegreesCelsius;
+            return (ushort)heat;
         }
     }
 }
