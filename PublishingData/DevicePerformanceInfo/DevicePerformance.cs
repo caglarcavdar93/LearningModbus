@@ -8,10 +8,8 @@ namespace PublishingData.DevicePerformanceInfo
 {
     public class DevicePerformance
     {
-        public int CpuUsage { get; set; }
-        public int DiskUsage { get; set; }
-        public string DeviceName { get; set; }
-        public int MemoryUsage { get; set; }
-        public int CpuHeat { get; set; }
+        public ushort CpuUsage { get; set; }
+        public ushort MemoryUsage { get; set; }
+        public ushort CpuHeat { get; set; }
     }
 }

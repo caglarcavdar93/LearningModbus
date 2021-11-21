@@ -23,9 +23,9 @@ namespace PublishingData.ModbusServices
 
         public void Dispose()
         {
-            _master.Dispose();
+            _master?.Dispose();
             _master = null;
-            _tcpClient.Close();
+            _tcpClient?.Close();
             _tcpClient=null;
         }
 
