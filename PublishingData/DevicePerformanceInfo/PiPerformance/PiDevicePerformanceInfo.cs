@@ -22,17 +22,21 @@ namespace PublishingData.DevicePerformanceInfo
 
         private ushort GetMemoryUsage()
         {
+            //Memory info is in /proc/meminfo
             return 0;
         }
 
         private ushort GetCpuUsage()
         {
+            //Cpu info is in /proc/stat 
             return 0;
         }
 
         private ushort GetCpuHeat()
         {
-            var heat= _cpuTemperature.Temperature.DegreesCelsius;
+            double heat = 0;
+            if (_cpuTemperature.IsAvailable)
+                heat = _cpuTemperature.Temperature.DegreesCelsius;
             return (ushort)heat;
         }
     }
