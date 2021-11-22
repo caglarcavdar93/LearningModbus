@@ -8,6 +8,7 @@ namespace PublishingData.DevicePerformanceInfo
         private readonly CpuTemperature _cpuTemperature;
         public PiDevicePerformanceInfo()
         {
+            //vcgencmd gives all the info
             _cpuTemperature = new CpuTemperature();
         }
         public DevicePerformance GetPerformanceInfo()
