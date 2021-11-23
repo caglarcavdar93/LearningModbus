@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -27,13 +28,16 @@ namespace PublishingData.DevicePerformanceInfo
         private ushort GetMemoryUsage()
         {
             //Memory info is in /proc/meminfo
-            return 0;
+            var memoryInfoString = ReadMemory();
+            var (memTotal,memAvailable) = ParseMemoryInfoString(memoryInfoString);
+            double ramUsage = (memTotal - memAvailable) * 100 /memTotal;
+            return (ushort)ramUsage;
         }
 
         private ushort GetCpuUsage()
         {
             //Cpu info is in /proc/stat 
-            var cpuUsage = ReadCpu();
+            var cpuUsage = GetCpuUsagePercent();
             return (ushort)cpuUsage;
         }
 
@@ -45,34 +49,37 @@ namespace PublishingData.DevicePerformanceInfo
             return (ushort)heat;
         }
 
-        private double ReadCpu()
+        private double GetCpuUsagePercent()
         {
-            var oldVal = "";
-            var newVal = "";
-            using (FileStream fileStream = new FileStream("/proc/stat", FileMode.Open, FileAccess.Read))
-            {
-
-                using (StreamReader streamReader = new StreamReader(fileStream))
-                {
-                    oldVal = streamReader.ReadLine();
-                }
-            }
+            var oldVal = ReadCpu();
             Thread.Sleep(1000);
+            var newVal = ReadCpu();
+
+            var oldArr = ParseCpuString(oldVal);
+
+            var newArr = ParseCpuString(newVal);
+
+            return CalculateCpuUsage(oldArr, newArr);
+        }
+        private string ReadCpu()
+        {
             using (FileStream fileStream = new FileStream("/proc/stat", FileMode.Open, FileAccess.Read))
             {
                 using (StreamReader streamReader = new StreamReader(fileStream))
                 {
-                    newVal = streamReader.ReadLine();
+                    return streamReader.ReadLine();
                 }
             }
-            var oldArr = oldVal.Split(' ').ToList();
-            oldArr.RemoveRange(0, 2);
-            var oldCpuValArr = oldArr.Select(x => Convert.ToDouble(x)).ToList();
-
-            var newArr = newVal.Split(' ').ToList();
-            newArr.RemoveRange(0, 2);
-            var newCpuValArr = newArr.Select(x => Convert.ToDouble(x)).ToList();
-
+        }
+        private List<double> ParseCpuString(string stringValues)
+        {
+            var splitted = stringValues.Split(' ').ToList();
+            splitted.RemoveRange(0, 2);
+            var cpuValArr = splitted.Select(x => Convert.ToDouble(x)).ToList();
+            return cpuValArr;
+        }
+        private double CalculateCpuUsage(List<double> oldCpuValArr, List<double> newCpuValArr)
+        {
             double prevIdle = oldCpuValArr[3] + oldCpuValArr[4];
             double idle = newCpuValArr[3] + newCpuValArr[4];
 
@@ -88,9 +95,29 @@ namespace PublishingData.DevicePerformanceInfo
             double cpuPercentage = 0;
 
 
-            cpuPercentage = (totalDifference - idleDifference) / (totalDifference);
-            cpuPercentage = cpuPercentage * 100;
+            cpuPercentage = (totalDifference - idleDifference) * 100 / (totalDifference);
             return cpuPercentage;
+        }
+
+        private string ReadMemory()
+        {
+            using (FileStream fileStream = new FileStream("/proc/meminfo", FileMode.Open, FileAccess.Read))
+            {
+                using (StreamReader streamReader = new StreamReader(fileStream))
+                {
+                    return streamReader.ReadToEnd();
+                }
+            }
+        }
+        private (long memTotal,long memAvailable) ParseMemoryInfoString(string memoryInfoString)
+        {
+            memoryInfoString = String.Concat(memoryInfoString.Where(c => !Char.IsWhiteSpace(c)));
+            var infoLines = memoryInfoString.Split("kB").ToList();
+            
+            var memTotal = Convert.ToInt64(infoLines[0].Split(':')[1]);
+            var memAvailable = Convert.ToInt64(infoLines[2].Split(':')[1]);
+
+            return (memTotal,memAvailable);
         }
     }
 }
