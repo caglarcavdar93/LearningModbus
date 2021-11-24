@@ -21,27 +21,27 @@ namespace PublishingData.DevicePerformanceInfo
             {
                 CpuUsage = GetCpuUsage(),
                 MemoryUsage = GetMemoryUsage(),
-                CpuHeat = GetCpuHeat(),
+                CpuHeat = GetCpuTemperature(),
             };
         }
 
-        private ushort GetMemoryUsage()
+        private float GetMemoryUsage()
         {
             //Memory info is in /proc/meminfo
             var memoryInfoString = ReadMemory();
-            var (memTotal,memAvailable) = ParseMemoryInfoString(memoryInfoString);
-            double ramUsage = (memTotal - memAvailable) * 100 /memTotal;
-            return (ushort)ramUsage;
+            var (memTotal, memAvailable) = ParseMemoryInfoString(memoryInfoString);
+            float ramUsage = (memTotal - memAvailable) * 100 /memTotal;
+            return ramUsage;
         }
 
-        private ushort GetCpuUsage()
+        private float GetCpuUsage()
         {
             //Cpu info is in /proc/stat 
             var cpuUsage = GetCpuUsagePercent();
-            return (ushort)cpuUsage;
+            return cpuUsage;
         }
 
-        private ushort GetCpuHeat()
+        private ushort GetCpuTemperature()
         {
             double heat = 0;
             if (_cpuTemperature.IsAvailable)
@@ -49,7 +49,7 @@ namespace PublishingData.DevicePerformanceInfo
             return (ushort)heat;
         }
 
-        private double GetCpuUsagePercent()
+        private float GetCpuUsagePercent()
         {
             var oldVal = ReadCpu();
             Thread.Sleep(1000);
@@ -78,7 +78,8 @@ namespace PublishingData.DevicePerformanceInfo
             var cpuValArr = splitted.Select(x => Convert.ToDouble(x)).ToList();
             return cpuValArr;
         }
-        private double CalculateCpuUsage(List<double> oldCpuValArr, List<double> newCpuValArr)
+
+        private float CalculateCpuUsage(List<double> oldCpuValArr, List<double> newCpuValArr)
         {
             double prevIdle = oldCpuValArr[3] + oldCpuValArr[4];
             double idle = newCpuValArr[3] + newCpuValArr[4];
@@ -92,10 +93,7 @@ namespace PublishingData.DevicePerformanceInfo
             var totalDifference = total - prevTotal;
             var idleDifference = idle - prevIdle;
 
-            double cpuPercentage = 0;
-
-
-            cpuPercentage = (totalDifference - idleDifference) * 100 / (totalDifference);
+            float cpuPercentage = (float)((totalDifference - idleDifference) * 100 /totalDifference);
             return cpuPercentage;
         }
 
@@ -109,15 +107,15 @@ namespace PublishingData.DevicePerformanceInfo
                 }
             }
         }
-        private (long memTotal,long memAvailable) ParseMemoryInfoString(string memoryInfoString)
+        private (long memTotal, long memAvailable) ParseMemoryInfoString(string memoryInfoString)
         {
             memoryInfoString = String.Concat(memoryInfoString.Where(c => !Char.IsWhiteSpace(c)));
             var infoLines = memoryInfoString.Split("kB").ToList();
-            
+
             var memTotal = Convert.ToInt64(infoLines[0].Split(':')[1]);
             var memAvailable = Convert.ToInt64(infoLines[2].Split(':')[1]);
 
-            return (memTotal,memAvailable);
+            return (memTotal, memAvailable);
         }
     }
 }
