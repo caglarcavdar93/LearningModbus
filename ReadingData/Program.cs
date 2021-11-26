@@ -1,4 +1,5 @@
-﻿using NModbus;
+﻿using ConvertType;
+using NModbus;
 using System;
 using System.Net.Sockets;
 using System.Threading;
@@ -19,9 +20,10 @@ namespace ReadingData
             tcpClient.ConnectAsync("127.0.0.1", 10502);
             while (true)
             {
-                Thread.Sleep(3000);
-                var result = master.ReadHoldingRegisters(1, 0, 1);
-                Console.WriteLine(result[0]);
+                Thread.Sleep(6000);
+                var result = master.ReadHoldingRegisters(0, 18000, 2);
+                var floatResult = result.ToFloat();
+                Console.WriteLine(floatResult);
             }
         }
     }

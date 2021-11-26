@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PublishingData.DevicePerformanceInfo
 {
-    public interface IPiDevicePerformanceInfo : IDevicePerformanceInfo
+    public interface IPiDevicePerformanceInfo
     {
+        public DevicePerformance GetPerformanceInfo();
     }
 }

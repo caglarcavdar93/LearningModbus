@@ -6,6 +6,6 @@ namespace PublishingData.ModbusServices
     public interface IModbusClient : IDisposable
     {
         public void CreateMaster(IPAddress ip, int port);
-        public void WriteData(byte unitId, ushort address, ushort data);
+        public void Write(byte unitId, ushort address, ushort[] data);
     }
 }

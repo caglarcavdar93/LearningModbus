@@ -1,12 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NModbus;
 using PublishingData.DevicePerformanceInfo;
 using PublishingData.ModbusServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PublishingData
 {
@@ -24,9 +19,7 @@ namespace PublishingData
                     services.AddHostedService<Worker>();
                     services.AddTransient<IModbusServer, ModbusServer>();
                     services.AddTransient<IModbusClient, ModbusClient>();
-                    services.AddTransient<IMacDevicePerformanceInfo, MacDevicePerformanceInfo>();
                     services.AddTransient<IPiDevicePerformanceInfo, PiDevicePerformanceInfo>();
-                    services.AddTransient<IWinDevicePerformanceInfo, WinDevicePerformanceInfo>();
                 });
     }
 }

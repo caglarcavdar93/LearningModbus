@@ -29,9 +29,9 @@ namespace PublishingData.ModbusServices
             _tcpClient=null;
         }
 
-        public void WriteData(byte unitId, ushort address, ushort data)
+        public void Write(byte unitId, ushort address, ushort[] data)
         {
-            _master.WriteSingleRegister(unitId, address, data);
+            _master.WriteMultipleRegisters(unitId, address, data);
         }
     }
 }
