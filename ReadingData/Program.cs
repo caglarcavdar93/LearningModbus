@@ -3,14 +3,16 @@ using NModbus;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
+using System.Net.Http.Json;
 
 namespace ReadingData
 {
     internal class Program
     {
+        private static readonly HttpClient client = new HttpClient();
         static void Main(string[] args)
         {
 
@@ -22,6 +24,7 @@ namespace ReadingData
             master.Transport.SlaveBusyUsesRetryCount = true;
             var linuxServiceIp = ConfigurationManager.AppSettings["LinuxServiceIp"];
             var linuxServicePort = Convert.ToInt32(ConfigurationManager.AppSettings["LinuxServicePort"]);
+            var dataStoreServiceUrl = ConfigurationManager.AppSettings["DataStoreUrl"];
             tcpClient.ConnectAsync(linuxServiceIp, linuxServicePort);
             while (true)
             {
@@ -44,6 +47,8 @@ namespace ReadingData
                     CpuTemperature = dataList[2],
                     TimeStamp = DateTime.Now
                 };
+
+                client.PostAsJsonAsync(dataStoreServiceUrl + "/deviceperformance", sysPerformData);
                 Console.WriteLine($"Cpu Usage:{sysPerformData.CpuUsage} -- Cpu Temperature:{sysPerformData.CpuTemperature} -- Ram Usage:{sysPerformData.MemoryUsage} -- TimeStamp:{sysPerformData.TimeStamp}");
                 Thread.Sleep(6000);
             }

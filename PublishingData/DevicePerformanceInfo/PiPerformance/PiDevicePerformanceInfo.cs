@@ -30,7 +30,7 @@ namespace PublishingData.DevicePerformanceInfo
             //Memory info is in /proc/meminfo
             var memoryInfoString = ReadMemory();
             var (memTotal, memAvailable) = ParseMemoryInfoString(memoryInfoString);
-            float ramUsage = (memTotal - memAvailable) * 100 /memTotal;
+            float ramUsage = (float)Math.Round((double)(memTotal - memAvailable) * 100 /memTotal,2);
             return ramUsage;
         }
 
@@ -41,12 +41,12 @@ namespace PublishingData.DevicePerformanceInfo
             return cpuUsage;
         }
 
-        private ushort GetCpuTemperature()
+        private float GetCpuTemperature()
         {
-            double heat = 0;
+            double temp = 0;
             if (_cpuTemperature.IsAvailable)
-                heat = _cpuTemperature.Temperature.DegreesCelsius;
-            return (ushort)heat;
+                temp = Math.Round(_cpuTemperature.Temperature.DegreesCelsius,2);
+            return (float)temp;
         }
 
         private float GetCpuUsagePercent()
@@ -93,7 +93,7 @@ namespace PublishingData.DevicePerformanceInfo
             var totalDifference = total - prevTotal;
             var idleDifference = idle - prevIdle;
 
-            float cpuPercentage = (float)((totalDifference - idleDifference) * 100 /totalDifference);
+            float cpuPercentage = (float)(Math.Round((totalDifference - idleDifference) * 100 /totalDifference,2));
             return cpuPercentage;
         }
 
@@ -107,13 +107,13 @@ namespace PublishingData.DevicePerformanceInfo
                 }
             }
         }
-        private (long memTotal, long memAvailable) ParseMemoryInfoString(string memoryInfoString)
+        private (uint memTotal, uint memAvailable) ParseMemoryInfoString(string memoryInfoString)
         {
             memoryInfoString = String.Concat(memoryInfoString.Where(c => !Char.IsWhiteSpace(c)));
             var infoLines = memoryInfoString.Split("kB").ToList();
 
-            var memTotal = Convert.ToInt64(infoLines[0].Split(':')[1]);
-            var memAvailable = Convert.ToInt64(infoLines[2].Split(':')[1]);
+            var memTotal = Convert.ToUInt32(infoLines[0].Split(':')[1]);
+            var memAvailable = Convert.ToUInt32(infoLines[2].Split(':')[1]);
 
             return (memTotal, memAvailable);
         }
