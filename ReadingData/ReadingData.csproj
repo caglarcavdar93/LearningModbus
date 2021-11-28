@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="NModbus" Version="3.0.62" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

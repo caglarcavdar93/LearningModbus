@@ -21,7 +21,6 @@ namespace PublishingData
             IModbusClient modbusClient,
             IPiDevicePerformanceInfo piDevicePerformance)
         {
-            //Create modbus server
             _modbusClient = modbusClient;
             _modbusServer = modbusServer;
             _devicePerformance = piDevicePerformance;

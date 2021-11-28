@@ -32,9 +32,9 @@ namespace PublishingData.ModbusServices
 
         public void Dispose()
         {
-            _slaveNetwork.Dispose();
+            _slaveNetwork?.Dispose();
             _slaveNetwork = null;
-            _tcpListener.Stop();
+            _tcpListener?.Stop();
             _tcpListener = null;
         }
     }

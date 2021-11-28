@@ -1,6 +1,8 @@
 ﻿using ConvertType;
 using NModbus;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -17,14 +19,34 @@ namespace ReadingData
             master.Transport.Retries = 3;
             master.Transport.WaitToRetryMilliseconds = 1000;
             master.Transport.SlaveBusyUsesRetryCount = true;
-            tcpClient.ConnectAsync("127.0.0.1", 10502);
+            var linuxServiceIp = ConfigurationManager.AppSettings["LinuxServiceIp"];
+            var linuxServicePort = Convert.ToInt32(ConfigurationManager.AppSettings["LinuxServicePort"]);
+            tcpClient.ConnectAsync(linuxServiceIp, linuxServicePort);
             while (true)
             {
+                if (!tcpClient.Connected)
+                {
+                    Thread.Sleep(1000);
+                    continue;
+                }
+
+                var dataList = new List<float>();
+                for (ushort i = 0; i < 3; i++)
+                {
+                    var result = master.ReadHoldingRegisters(0, (ushort)(18000 + i), 2);
+                    dataList.Add(result.ToFloat());
+                }
+                var sysPerformData = new PiStatusData()
+                {
+                    CpuUsage = dataList[0],
+                    MemoryUsage = dataList[1],
+                    CpuHeat = dataList[2],
+                    TimeStamp = DateTime.Now
+                };
+                Console.WriteLine($"Cpu Usage:{sysPerformData.CpuUsage} -- Cpu Temperature:{sysPerformData.CpuHeat} -- Ram Usage:{sysPerformData.MemoryUsage}");
                 Thread.Sleep(6000);
-                var result = master.ReadHoldingRegisters(0, 18000, 2);
-                var floatResult = result.ToFloat();
-                Console.WriteLine(floatResult);
             }
         }
+
     }
 }
