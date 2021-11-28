@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace ReadingData
+﻿namespace StoringData.DevicePerformanceServices.Dto
 {
-    public class PiStatusData
+    public record CreateDevicePerformance
     {
         public float CpuUsage { get; set; }
         public float MemoryUsage { get; set; }

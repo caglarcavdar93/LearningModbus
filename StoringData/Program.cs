@@ -1,9 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using StoringData.Ctx;
+using StoringData.DevicePerformanceServices;
+using StoringData.DevicePerformanceServices.Dto;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DevicePerformanceDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
+    builder => builder.AllowAnyHeader()
+    .AllowAnyOrigin()
+    .AllowAnyMethod()));
+
+
+builder.Services.AddScoped<DevicePerformanceDbContext>();
+builder.Services.AddScoped<IDevicePerformanceService, DevicePerformanceService>();
 
 var app = builder.Build();
 
@@ -16,28 +32,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseCors("CorsPolicy");
 
-app.MapGet("/weatherforecast", () =>
+app.MapPost("/deviceperformance", async (CreateDevicePerformance model) =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-       new WeatherForecast
-       (
-           DateTime.Now.AddDays(index),
-           Random.Shared.Next(-20, 55),
-           summaries[Random.Shared.Next(summaries.Length)]
-       ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    using (var scope = app.Services.CreateScope())
+    {
+        IDevicePerformanceService performanceService = scope.ServiceProvider.GetRequiredService<IDevicePerformanceService>();
+        var record = await performanceService.CreateDevicePerformance(model);
+        return record; 
+    }
+});
 
 app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

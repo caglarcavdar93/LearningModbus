@@ -3,6 +3,7 @@ using NModbus;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -40,10 +41,10 @@ namespace ReadingData
                 {
                     CpuUsage = dataList[0],
                     MemoryUsage = dataList[1],
-                    CpuHeat = dataList[2],
+                    CpuTemperature = dataList[2],
                     TimeStamp = DateTime.Now
                 };
-                Console.WriteLine($"Cpu Usage:{sysPerformData.CpuUsage} -- Cpu Temperature:{sysPerformData.CpuHeat} -- Ram Usage:{sysPerformData.MemoryUsage}");
+                Console.WriteLine($"Cpu Usage:{sysPerformData.CpuUsage} -- Cpu Temperature:{sysPerformData.CpuTemperature} -- Ram Usage:{sysPerformData.MemoryUsage} -- TimeStamp:{sysPerformData.TimeStamp}");
                 Thread.Sleep(6000);
             }
         }

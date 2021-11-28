@@ -52,7 +52,7 @@ namespace PublishingData
 
                 var performanceData = _devicePerformance.GetPerformanceInfo();
                 WriteData(performanceData);
-                _logger.LogInformation($"Cpu Usage:{performanceData.CpuUsage} -- Cpu Temperature:{performanceData.CpuHeat} -- Ram Usage:{performanceData.MemoryUsage}");
+                _logger.LogInformation($"Cpu Usage:{performanceData.CpuUsage} -- Cpu Temperature:{performanceData.CpuTemperature} -- Ram Usage:{performanceData.MemoryUsage} -- TimeStamp:{DateTime.Now}");
                 await Task.Delay(5000, stoppingToken);
             }
         }

@@ -21,7 +21,7 @@ namespace PublishingData.DevicePerformanceInfo
             {
                 CpuUsage = GetCpuUsage(),
                 MemoryUsage = GetMemoryUsage(),
-                CpuHeat = GetCpuTemperature(),
+                CpuTemperature = GetCpuTemperature(),
             };
         }
 
