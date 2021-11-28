@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PublishingData.DevicePerformanceInfo;
 using PublishingData.ModbusServices;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -61,7 +62,7 @@ namespace PublishingData
             ushort address = 18000;
             foreach (var prop in props)
             {
-                var value = (float)prop.GetValue(performance);
+                var value = Convert.ToSingle(prop.GetValue(performance));
                 var convertedValue = value.ToUnsignedShortArray();
                 _modbusClient.Write(_unitId, address, convertedValue);
                 address+=1;
