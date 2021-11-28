@@ -15,17 +15,20 @@ namespace ReadingData
         private static readonly HttpClient _client = new HttpClient();
         static void Main(string[] args)
         {
+            var linuxServiceIp = ConfigurationManager.AppSettings["LinuxServiceIp"];
+            var linuxServicePort = Convert.ToInt32(ConfigurationManager.AppSettings["LinuxServicePort"]);
+            var dataStoreServiceUrl = ConfigurationManager.AppSettings["DataStoreUrl"];
 
             var modbusFactory = new ModbusFactory();
             var tcpClient = new TcpClient();
             IModbusMaster master = modbusFactory.CreateMaster(tcpClient);
+            tcpClient.ConnectAsync(linuxServiceIp, linuxServicePort);
             master.Transport.Retries = 3;
             master.Transport.WaitToRetryMilliseconds = 1000;
             master.Transport.SlaveBusyUsesRetryCount = true;
-            var linuxServiceIp = ConfigurationManager.AppSettings["LinuxServiceIp"];
-            var linuxServicePort = Convert.ToInt32(ConfigurationManager.AppSettings["LinuxServicePort"]);
-            var dataStoreServiceUrl = ConfigurationManager.AppSettings["DataStoreUrl"];
-            tcpClient.ConnectAsync(linuxServiceIp, linuxServicePort);
+           
+            
+            
             while (true)
             {
                 if (!tcpClient.Connected)
