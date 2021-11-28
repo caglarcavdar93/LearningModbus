@@ -11,8 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DevicePerformanceDbContext>(options => options.UseSqlServer(connectionString));
-
-builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
+var policyName = "CorsPolicy";
+builder.Services.AddCors(options => options.AddPolicy(policyName,
     builder => builder.AllowAnyHeader()
     .AllowAnyOrigin()
     .AllowAnyMethod()));
@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("CorsPolicy");
+app.UseCors(policyName);
 
 app.MapPost("/deviceperformance", async (CreateDevicePerformance model) =>
 {
