@@ -12,7 +12,7 @@ namespace ReadingData
 {
     internal class Program
     {
-        private static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClient _client = new HttpClient();
         static void Main(string[] args)
         {
 
@@ -42,13 +42,13 @@ namespace ReadingData
                 }
                 var sysPerformData = new PiStatusData()
                 {
-                    CpuUsage = dataList[0],
-                    MemoryUsage = dataList[1],
-                    CpuTemperature = dataList[2],
+                    CpuUsage = (float)Math.Round(dataList[0],2),
+                    MemoryUsage = (float)Math.Round(dataList[1], 2),
+                    CpuTemperature = (float)Math.Round(dataList[2], 2),
                     TimeStamp = DateTime.Now
                 };
 
-                client.PostAsJsonAsync(dataStoreServiceUrl + "/deviceperformance", sysPerformData);
+                _client.PostAsJsonAsync(dataStoreServiceUrl + "/deviceperformance", sysPerformData);
                 Console.WriteLine($"Cpu Usage:{sysPerformData.CpuUsage} -- Cpu Temperature:{sysPerformData.CpuTemperature} -- Ram Usage:{sysPerformData.MemoryUsage} -- TimeStamp:{sysPerformData.TimeStamp}");
                 Thread.Sleep(6000);
             }
