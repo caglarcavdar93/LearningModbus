@@ -9,16 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DevicePerformanceDbContext>(options => options.UseSqlServer(connectionString));
+
 var policyName = "CorsPolicy";
 builder.Services.AddCors(options => options.AddPolicy(policyName,
     builder => builder.AllowAnyHeader()
     .AllowAnyOrigin()
     .AllowAnyMethod()));
 
-
-builder.Services.AddScoped<DevicePerformanceDbContext>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DevicePerformanceDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IDevicePerformanceService, DevicePerformanceService>();
 
 var app = builder.Build();
