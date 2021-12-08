@@ -40,7 +40,7 @@ namespace ReadingData
                 var dataList = new List<float>();
                 for (ushort i = 0; i < 3; i++)
                 {
-                    var result = master.ReadHoldingRegisters(0, (ushort)(18000 + i), 2);
+                    var result = master.ReadHoldingRegisters(1, (ushort)(18000 + i), 2);
                     dataList.Add(result.ToFloat());
                 }
                 var sysPerformData = new PiStatusData()

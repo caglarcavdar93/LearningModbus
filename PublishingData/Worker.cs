@@ -17,7 +17,7 @@ namespace PublishingData
         private readonly IModbusServer _modbusServer;
         private readonly IModbusClient _modbusClient;
         private readonly IPiDevicePerformanceInfo _devicePerformance;
-        private byte _unitId = 0;
+        private byte _unitId = 1;
         public Worker(ILogger<Worker> logger, IModbusServer modbusServer,
             IModbusClient modbusClient,
             IPiDevicePerformanceInfo piDevicePerformance)
